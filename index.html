@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="reset.css">
+    <style>
+        header {
+            background-color: lightgreen;
+            padding: 1rem 0.5rem;
+        }
+
+        main {
+            padding-top: 0.5rem;
+        }
+
+        .container {
+            width: 1280px;
+            margin: 0 auto;
+            height: 100vh;
+        }
+
+        button {
+            border: 1px solid black;
+            border-radius: 2px;
+            padding: 5px;
+            background-color: skyblue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Fetch テスト</h1>
+</header>
+<main>
+    <div class="container">
+        <button id="getBtn" type="button">取得</button>
+        <ul id="nameList"></ul>
+    </div>
+</main>
+<script>
+    const btnElement = document.getElementById('getBtn');
+    const ulElement = document.getElementById('nameList');
+    // Promise
+    const getUsers = () => {
+        const resPromise = fetch("https://jsonplaceholder.typicode.com/users/");
+        resPromise.then(function (response) {
+            return response.json()
+        }).then(function (data) {
+            for (const d of data) {
+                const list = document.createElement('li');
+                list.innerHTML = d.name;
+                ulElement.appendChild(list)
+            }
+        }).catch(function (e) {
+            console.error(e);
+            window.alert('通信に失敗しました。')
+        })
+    };
+    // async/await
+    const getUsers2 = async function () {
+        try {
+            const resPromise = await fetch("https://jsonplaceholder.typicode.com/users/");
+            const data = resPromise.json();
+            for (const d of data) {
+                const list = document.createElement('li');
+                list.innerHTML = d.name;
+                ulElement.appendChild(list)
+            }
+        } catch (e) {
+            console.error(e);
+            window.alert('通信に失敗しました。')
+        }
+    }
+    // Promise
+    const getUsers3 = () => {
+        const resPromise = fetch("https://jsonplaceholder.typicode.com/users/");
+        resPromise.then((response) => {
+            response.json().then((data) => {
+                for (const d of data) {
+                    const list = document.createElement('li');
+                    list.innerHTML = d.name;
+                    ulElement.appendChild(list)
+                }
+            }).catch((e) => {
+                console.error(e);
+                window.alert('fetchに失敗しました。')
+            })
+        }).catch((e) => {
+            console.error(e);
+            window.alert('jsonに失敗しました。')
+        })
+    };
+    // async/await
+    const getUsers4 = async () => {
+        try {
+            const resPromise = await fetch("https://jsonplaceholder.typicode.com/users/");
+            try {
+                const data = resPromise.json();
+                for (const d of data) {
+                    const list = document.createElement('li');
+                    list.innerHTML = d.name;
+                    ulElement.appendChild(list)
+                }
+            } catch (e) {
+                console.error(e);
+                window.alert('jsonに失敗しました。')
+            }
+        } catch (e) {
+            console.error(e);
+            window.alert('fetchに失敗しました。')
+        }
+    }
+
+    btnElement.addEventListener('click', getUsers, false);
+</script>
+</body>
+</html>
